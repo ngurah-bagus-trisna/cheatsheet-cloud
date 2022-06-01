@@ -69,24 +69,28 @@ $HOME/kvm/instance/$VM_NAME/root-disk.qcow2 20G
 # buat dengan vim
 sudo vim cloud-init.cfg
 ---
-system-info:
-    default_user:
-        name: $USERNAME
-        home: /home/$USERNAME
+#cloud-config
 
-password: $PASSWORD
-chpasswd: { expire: False }
-hostname: $VM_NAME
+hostname: $hostname
+users:
+  - name: ubuntu
+    ssh-authorized-keys:
+      - $PUB_KEY
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: sudo
+    shell: /bin/bash
+    passwd: echo password | mkpasswd -m sha-512 -s
+    chpasswd: { expire: False }
 
-# Untuk configurasi agar ssh masuk dengan password
-ssh_pwauth: True
+runcmd:
+  - echo "AllowUsers ubuntu" >> /etc/ssh/sshd_config
+  - restart ssh
+
 ```
 
-6. Buat .iso dari _cloud-init.cfg_ yang tadi telah di buat 
+6. Buat .img dari _cloud-init.cfg_ yang tadi telah di buat 
 ```bash
-sudo cloud-localds \
-cloud-init.iso \ 
-cloud-init.cfg
+cloud-localds -v cloud-init.img cloud_init.cfg
 ```
 
 7. Launch instance
@@ -95,8 +99,8 @@ sudo virt-install \
     --name $VM_NAME \
     --vcpus 1 \ # Menentukan berapa core yang akan dipakai instance
     --memory 2048 \ # Sesuaikan ram
-    --disk root-disk.cqow2,device=disk,bus=virtio \ # Mount root-disk terlebih dahulu
-    --disk cloud-init.iso,device=cdrom \ # Mount config file
+    --disk root-disk.cqow2,format=qcow2 \ # Mount root-disk terlebih dahulu
+    --disk cloud-init.img,device=cdrom \ # Mount config file
     --os-type linux \ 
     --os-variant ubuntu22.04 \
     --virt-type kvm \

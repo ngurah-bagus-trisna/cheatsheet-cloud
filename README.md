@@ -1,2 +1,2 @@
-# learn-kubernetes
-Repository menyimpan beberapa catatan mengenai Kubernetes
+# cheatsheet-cloud
+Repository menyimpan beberapa catatan saya.

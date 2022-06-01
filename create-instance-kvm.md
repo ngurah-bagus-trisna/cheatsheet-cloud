@@ -111,16 +111,14 @@ sudo virt-install \
 ```
 
 8. Manage Virtual Machine
-```bash
-# shutdown
-sudo virsh shutdown instance-name
 
-# reboot
-sudo virsh reboot instance-name
-
-# start
-sudo virsh start instance-name
-
-# remove
-sudo virsh undefine instance-name
-```
+| Syntax      | Description |
+| ----------- | ----------- |
+| sudo virsh shutdown _instance-name_ | Shutdown instance         | 
+| sudo virsh reboot _instance-name_   | Reboot instance           |
+| sudo virsh start _instance-name_    | Start instance            |
+| sudo virsh undifine _instance-name_ | Remove instance           |
+| sudo virsh list --all               | List instance/Domain      |
+| sudo virsh domifaddr _instance-name_| Get ip address instance   |
+| sudo virsh nodeinfo                 | Get info node information |
+| osinfo-query os                     | Get --os-variant info     |

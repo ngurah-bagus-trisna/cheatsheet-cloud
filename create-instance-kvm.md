@@ -101,7 +101,7 @@ sudo virt-install \
     --os-variant ubuntu22.04 \
     --virt-type kvm \
     --graphics none \
-    --network network=default,model=virtio \
+    --network network=default \
     --import \
     --noautoconsole
 ```

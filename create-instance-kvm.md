@@ -122,3 +122,7 @@ sudo virt-install \
 | sudo virsh domifaddr _instance-name_| Get ip address instance   |
 | sudo virsh nodeinfo                 | Get info node information |
 | osinfo-query os                     | Get --os-variant info     |
+
+Refrensi :
+- https://medium.com/@art.vasilyev/use-ubuntu-cloud-image-with-kvm-1f28c19f82f8
+- https://blog.programster.org/create-ubuntu-20-kvm-guest-from-cloud-image

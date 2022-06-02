@@ -51,3 +51,80 @@ Contoh dari exporter:
 - Messaging: RabbitMQ & Kafka
 - Storage: Ceph, Gluster & Hadoop
 - HTTP: Apache, HAProxy, Nginx, & Varnish
+
+## Metrics
+
+Prometheus mendefinisikan teks metrics yang mudah dimengerti manusia. Metrics disimpan di komponen database prometheus 
+![Contoh metrics](https://course.adinusa.id/media/markdownx/b8f99a75-d7e7-4a7c-a371-4e5aeda6d20b.png)
+
+- **#HELP**: Deskripsi dari metrics
+- **#Types**: 4 Metrics type
+
+1. **Counter** : Metrics akumulatif yang nilainya hanya dapat meningkat. Hal yang dapatmerubah data counter hanya saat metrics di reset/nilai 0. Contoh Counter : Jumlah permintaan/request, Jumlah kesalahan
+![Counter](https://course.adinusa.id/media/markdownx/a46cfab0-9d22-43ff-a793-fefcda70cbff.png)
+
+2. **Gauge** : Gauge metrics adalah snapshot yang memberikan pengukuran yang bisa naik/turun. Contoh, temperature, disk space, memory usage
+![Gauge](https://course.adinusa.id/media/markdownx/7199569f-a5eb-4461-9136-08a1d7477559.png)
+
+3. **Histogram** : Jenis metrics ini adalah untuk menentukan frecuency dari value observasi yang disimpan di suatu wadah. Metrics ini berfungsi untuk melacak size dan latency. Contoh Request Durations, Respon Size.
+![Histogram](https://course.adinusa.id/media/markdownx/de78729b-2e39-4fed-80f5-64fe1f584e22.png)
+
+4. **Summaries** : Summaries mirib seperti histogram di beberapa hal. Tetapi menyajikan data yang berbeda dan umumnya kurang bermanfaat. Alasan utama untuk menggunakan summaries adalah ketika summaries yang akurat diperlukan, terlepas dari distribusi dan jangkauan peristiwa yang diamati.
+![Summaries](https://course.adinusa.id/media/markdownx/0a2c7200-35b4-4be1-bfa8-35207a4aee3d.png)
+   
+
+
+## Service Discovery
+
+Prometheus service discovery adalah cara standar mencari endpoint untuk mendapatkan metrics. Kamu dapat setup scraping mekanisme di prometheus.yaml
+
+Service Discovery bukan hanya tentang menulis daftar server ke prometheus, atau monitoring. Ini adalah masalah yang lebih umum yang akan Anda lihat di seluruh sistem Anda; aplikasi perlu menemukan dependensinya untuk diajak bicara, dan teknisi perangkat keras perlu mengetahui mesin mana yang aman untuk dimatikan dan diperbaiki
+
+Oleh karena itu, Anda seharusnya tidak hanya memiliki daftar mentah mesin dan layanan, tetapi juga konvensi tentang bagaimana mereka diatur dan siklus hidupnya.
+
+- Static: target yang di provide langsung ke prometheus.yaml
+
+```yaml
+scrape_configs:
+  - job_name: 'prometheus-[username]'
+    static_configs:
+    - targets: ['10.X.X.10:9090']
+```
+
+- File: kamu dapat menyediakan targets di file. File harus berekstensi .json/.yaml
+
+```json
+[
+  {
+    "targets": [ "10.X.X.10:9100", "10.X.X.20:9100" ],
+    "labels": {
+      "team": "infra",
+      "job": "node"
+    }
+  },
+  {
+    "targets": [ "10.X.X.10:9090" ],
+    "labels": {
+      "team": "monitoring",
+      "job": "prometheus"
+    }
+  }
+]
+```
+
+## Memvisualisasikan data
+
+Data visualisasi adalah salah satu cara simple untuk produksi/melihat informasi. Prometheus mengekspose API, dimana _PromQL_ queries akan memproduksi data mentah untuk virtualisasi
+
+Untuk sekarang, software untuk virtualisasi data terbaik adalah Grafana.
+
+Jenis-jenis data visualisasi:
+
+1. **Expression Browser**: disini kamu dapat langsung menjalankan PromQL langsung dan memvisualisasikan nya secara instant.
+![](https://course.adinusa.id/media/markdownx/22505f1d-a68b-4b83-a833-297b6227e582.png)
+
+2. **Console Template**: Console template memberikan akses untuk membuat console menggunakan bahasa Go. Console Template menyajikan data dari prometheus. console template juga adalah cara paling powerfull untuk membuat templates yang akan bisa mudah di source control
+![Console Template](https://course.adinusa.id/media/markdownx/712863d0-295e-4af2-9eb8-07f8631836d2.png)
+
+3. **Grafana**: Grafana adalah project open source untuk dashboarding. Ini adalah konsep oleh data source.
+![Grafana](https://course.adinusa.id/media/markdownx/98ad1f12-867f-4ab0-be67-07dac4ea3e5b.png)

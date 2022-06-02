@@ -124,7 +124,7 @@ scrape_configs:
 ./promtool check config config.yml
 ./prometheus --help
 ./prometheus --version
-./prometheus --config.file=/opt/prometheus-2.10.0.linux-amd64/config.yml
+./prometheus --config.file=/opt/prometheus-2.36.0.linux-amd64/config.yml
 ```
 
 4. Akses dari browser

@@ -64,12 +64,15 @@ Prometheus mendefinisikan teks metrics yang mudah dimengerti manusia. Metrics di
 ![Counter](https://course.adinusa.id/media/markdownx/a46cfab0-9d22-43ff-a793-fefcda70cbff.png)
 
 2. **Gauge** : Gauge metrics adalah snapshot yang memberikan pengukuran yang bisa naik/turun. Contoh, temperature, disk space, memory usage
+
 ![Gauge](https://course.adinusa.id/media/markdownx/7199569f-a5eb-4461-9136-08a1d7477559.png)
 
 3. **Histogram** : Jenis metrics ini adalah untuk menentukan frecuency dari value observasi yang disimpan di suatu wadah. Metrics ini berfungsi untuk melacak size dan latency. Contoh Request Durations, Respon Size.
+
 ![Histogram](https://course.adinusa.id/media/markdownx/de78729b-2e39-4fed-80f5-64fe1f584e22.png)
 
 4. **Summaries** : Summaries mirib seperti histogram di beberapa hal. Tetapi menyajikan data yang berbeda dan umumnya kurang bermanfaat. Alasan utama untuk menggunakan summaries adalah ketika summaries yang akurat diperlukan, terlepas dari distribusi dan jangkauan peristiwa yang diamati.
+
 ![Summaries](https://course.adinusa.id/media/markdownx/0a2c7200-35b4-4be1-bfa8-35207a4aee3d.png)
    
 

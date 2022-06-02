@@ -282,7 +282,7 @@ prom/mysqld-exporter:latest \
 > engine_daemon_container_states_containers
 
 Get uptime value
-> (time() - process_start_time_seconds{instance="192.168.122.10:9100",job="mysql-metric"})
+> (time() - process_start_time_seconds{instance="192.168.122.10:9323",job="mysql-exporter"})
 
 Get average ercentage cpu
-> 100 - avg (irate(node_cpu_seconds_total{instance="192.168.122.10:9100",job="docker-metric",mode="idle"}[5m])) by (instance) * 100
+> 100 - avg (irate(node_cpu_seconds_total{instance="192.168.122.10:9323",job="docker-exporter",mode="idle"}[5m])) by (instance) * 100

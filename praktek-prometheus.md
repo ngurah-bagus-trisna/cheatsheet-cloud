@@ -161,3 +161,128 @@ systemctl start prometheus_server.service
 systemctl status prometheus_server.service
 journalctl -u prometheus_server
 ```
+
+# Ekspos Metrics Mysql di Docker
+
+Eksekusi di prom-node-1
+
+## Install Docker
+
+Refrensi: https://docs.docker.com/engine/install/ubuntu/
+```bash
+# Install depedencies
+sudo apt-get update
+
+sudo apt-get install \
+ca-certificates \
+curl \
+gnupg \
+lsb-release
+
+# Add docker official GPG key
+sudo mkdir -p /etc/apt/keyrings
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# Setup repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine
+sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+
+# Setup permission for regular user
+sudo groupadd docker
+
+# execute on regular user
+sudo usermod -aG docker $USER 
+```
+
+## Ekspose metrics exporter docker
+
+1. Setelah docker terinstall, expose metric memakai instruksi dibawah
+```json
+sudo vi sudo vi /etc/docker/daemon.json
+# ------
+
+{
+"experimental": true,
+"metrics-addr": "192.168.122.10:9323"
+}
+
+```
+
+2. Tambahkan job untuk docker metrics ke prometheus
+
+```bash
+vi /opt/prometheus-2.10.0.linux-amd64/config.yml
+# ----
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus-username'
+    static_configs:
+    - targets: ['192.168.122.10:9090']
+  - job_name: 'node-exporter'
+    static_configs:
+    - targets: ['192.168.122.10:9100','192.168.122.20:9100']
+
+# add job for docker here
+  - job_name: 'mysql-exporter'
+    static_configs:
+    - targets: ['192.168.122.10:9323']
+
+# -----
+
+# Restart docker & prometheus
+systemctl restart docker 
+systemctl restart prometheus_server.service
+```
+
+3. Setup Docker
+
+```bash
+# Create network for mysql
+docker network create db_network
+
+# Create and run Mysql inside docker container
+docker run -d --name mysql-server \
+--publish 3306 \
+--network db_network \
+--restart unless-stopped \
+--env MYSQL_ROOT_PASSWORD=wait \
+--volume mysql-server-datadir:/var/lib/mysql \
+mysql:8 \
+--default-authentication-plugin=mysql_native_password
+
+# Create user for monitoring inside mysql server container
+docker exec -it mysql-server -uroot -p 
+mysql> CREATE USER 'exporter'@'%' IDENTIFIED BY 'wait' WITH MAX_USER_CONNECTIONS 3;
+mysql> GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';
+
+# Run mysql exporter 
+docker run -d --name mysql-exporter \
+--publish 9104 \
+--restart always \
+--network db_network \
+--env DATA_SOURCE_NAME="exporter:wait@(mysql-server:3306)" \
+prom/mysqld-exporter:latest \
+--collect.info_schema.processlist \
+--collect.info_schema.innodb_metrics \
+--collect.info_schema.tablestats \
+--collect.info_schema.tables \
+--collect.info_schema.userstats \
+--collect.engine_innodb_status
+```
+
+4. Access graph di = http://ip-prom-node-1:9090 Cari expression dibawah
+> engine_daemon_container_states_containers
+
+Get uptime value
+> (time() - process_start_time_seconds{instance="192.168.122.10:9100",job="mysql-metric"})
+
+Get average ercentage cpu
+> 100 - avg (irate(node_cpu_seconds_total{instance="192.168.122.10:9100",job="docker-metric",mode="idle"}[5m])) by (instance) * 100

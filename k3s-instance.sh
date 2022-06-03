@@ -18,7 +18,7 @@ hostname: k3s-$i
 users:
   - name: ubuntu
     ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDE59zvDSPD6D7UIHGNzkJU2ke2axcSNk+x1VDocpS25Svy1bGDmeBbPYnw1pgEHuKAL4Hk3XKWCgrDwoAwbop+TiuLZtztCa6oz86XCkIN82PVmaNrJ22cY6EobVhVG2OkXka7xDVzAqcjHgnnZCqeVzxVB5XW8YUF988HitS77sMoIO0jHx/a0Yj+zGp9d1MPZsnxSdCjhXGFLWUKrqQyO7af2NUBvxScDdThH/VU0+emOz+kEfEbfOeEEMwP+9Thyysiqb3YhyP3k9DsDZQhev+dHApWcDs5ZbgGkkhAqffbNeP8ELyLlpjb4c6FAfVULL9x4OgRBouHN+vokTc6rMYaTZ5BPJy2ggiOIxwOfYD5myNyTMidunMs7esU6BbZepXME5/jkGlJo5/Ucu/PJCIsPacBG7/wJE5EhiwsUhX4d6geM7ym49XhayhSdmyOEGQM49iWBjos6/NYZnwCQDk+zWmCx/f/5sdFQLZ7MBsS6K+jgZq3eHuigSbmBbU= wait@acer
+      - ssh-rsa $PUB-KEY
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: sudo
     shell: /bin/bash

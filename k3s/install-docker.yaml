@@ -1,0 +1,31 @@
+- name: Install docker on worker and master node
+  hosts: servers
+  become: true
+  tasks:
+    - name: pastikan beberapa aplikasi pendukung tersedia
+      apt: 
+        update_cache: yes
+        force_apt_get: yes
+        pkg:
+          - apt-transport-https 
+          - ca-certificates 
+          - curl 
+          - software-properties-common
+        state: present
+
+    - name: install docker CE
+      apt:
+        name: docker-ce
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: start docker
+      systemd:
+        enabled: yes
+        state: started
+
+    - name: change permission for regular user
+      user:
+        name: 'ubuntu'
+        group: docker
+        append: yes

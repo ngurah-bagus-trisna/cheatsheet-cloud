@@ -41,5 +41,4 @@ systemctl status grafana.service
 journalctl -u grafana
 ```
 
-3. Add prometheus to data source
-![Prometheus data source]()
+3. Akses grafana di port 3000

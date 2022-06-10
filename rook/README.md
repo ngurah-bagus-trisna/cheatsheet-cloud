@@ -5,8 +5,9 @@ Rook is an open source cloud-native storage orchestrator for Kubernetes, providi
 Task.
 - [ ] Setup enviroment kubernetes v1.15.9
 - [ ] Mempelajari konsep Rook-ceph
-- [ ] Deploy rook
-- [ ] Storage Class
+- [ ] Coba Deploy rook di kubernetes
+- [ ] Buat dokumentasi, [Refrensi](https://docs.google.com/document/d/1iohAm71UrHNTCA5z4mQOpQhU05FjHIrGR1jbgjrzhE8/edit)
+
 
 Refrensi:
 - https://computingforgeeks.com/how-to-deploy-rook-ceph-storage-on-kubernetes-cluster/ 

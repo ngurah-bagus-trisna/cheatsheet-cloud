@@ -41,8 +41,6 @@ mv jammy-server-cloudimg-amd64.img jammy-server-cloudimg-amd64.qcow2
 ```bash
 # Eksekusi di bash
 VM_NAME="ubuntu-server"
-USERNAME="ubuntu"
-PASSWORD="wait"
 ```
 
 3. Buat direktori instance dan copy image yang di download ke dalam direktori
@@ -79,8 +77,6 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     groups: sudo
     shell: /bin/bash
-    passwd: echo password | mkpasswd -m sha-512 -s
-    chpasswd: { expire: False }
 
 runcmd:
   - echo "AllowUsers ubuntu" >> /etc/ssh/sshd_config

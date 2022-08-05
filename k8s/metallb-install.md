@@ -60,4 +60,4 @@ kubectl apply -f value.yaml
 
 # Next.
 
-Install ingress
+Install Nginx ingress

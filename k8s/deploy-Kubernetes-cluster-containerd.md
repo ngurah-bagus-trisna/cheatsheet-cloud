@@ -188,7 +188,7 @@ kubeadm join [api-server-endpoint] [flags]
 # Exec on worker node
 kubectl drain  <node-name> --delete-local-data --ignore-daemonsets
 
-kubectl cordon <node-name>
+kubectl delete node <node-name>
 
 sudo kubeadm reset
 ```

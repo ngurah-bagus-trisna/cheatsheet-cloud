@@ -2,20 +2,92 @@
 
 **Kubernetes** adalah platform open source untuk mengelola kumpulan kontainer dalam suatu cluster server
 
-## Sebelum Install Kubernetes
+## Install containerd di cluster
 
-1. Jalankan script berikut
+> _Exec on all node_
+
+1. Add repository & Instal conainerd
+
+_Refrensi_ : https://docs.docker.com/engine/install/ubuntu/
 
 ```bash
+sudo apt update
+
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+    
+# add docker GPG
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# setup repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install containerd
+sudo apt update
+sudo apt install containerd.io
+```
+
+2. Config containerd
+
+_Refrensi_ : https://devopstales.github.io/kubernetes/k8s-install-containerd/
+
+```bash
+# add default config containerd to /etc/containerd. Exec on root
+sudo su
+mkdir -p /etc/containerd
+containerd config default > /etc/containerd/config.toml
+
+# Configure SystemdCgroup.
+nano /erc/containerd/config.toml
+```
+
+Change value from false to true
+
+```toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+      SystemdCgroup = true # default value false
+```
+
+3. Configuation networking for runtime
+
+```bash
+cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+kvm-intel
+EOF
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
 cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
-net.ipv4.ip_forward     = 1
 net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 EOF
+
+sysctl --system
+
+# Restart containerd
+systemctl enable --now containerd
+systemctl restart containerd
+
+# try containerd. 
+echo "runtime-endpoint: unix:///run/containerd/containerd.sock" > /etc/crictl.yaml
+crictl ps
 ```
 
 ## Installing kubeadm, kubelet and kubectl
-*Exeute on all node*
+> *Exeute on all node*
+
+_Refrensi_ : https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 1. Update package dan install depedencies
 
@@ -46,30 +118,14 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-5. Configure cgroup docker
-
-```bash
-cat > /etc/docker/daemon.json << EOF
-{
-      "exec-opts": ["native.cgroupdriver=systemd"],
-      "log-driver": "json-file",
-      "log-opts": {
-      "max-size": "100m"
-      },
-      "storage-driver": "overlay2"
-}
-EOF
-
-# Restart docker
-
-systemctl restart docker.service
-```
-
 6. Disable swap
 
 ```bash
+free -h
 swapoff -a
-sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+swapoff -a
+sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
+free -h
 ```
 
 ## Deploy Cluster

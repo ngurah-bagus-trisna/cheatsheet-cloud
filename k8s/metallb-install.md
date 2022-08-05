@@ -57,3 +57,7 @@ spec:
 ```bash
 kubectl apply -f value.yaml
 ```
+
+# Next.
+
+Install ingress

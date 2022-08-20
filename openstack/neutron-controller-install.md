@@ -183,7 +183,11 @@ ovs-vsctl set open . external-ids:ovn-cms-options=enable-chassis-as-gw
 systemctl restart neutron-server
 systemctl enable neutron-server
 systemctl status neutron-server
+```
 
+10. Verify
+
+```bash
 ss -l '( sport = :9696 )'
 
 openstack network agent list

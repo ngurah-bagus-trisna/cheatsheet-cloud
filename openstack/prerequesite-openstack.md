@@ -4,6 +4,7 @@
 
 1. Create password for service openstack
 
+```
 ROOT_DBPASS: 5aca19f716b8c00aef6c 
 ADMIN_PASS: c453a531afddd1eee49d
 CINDER_DBPASS: cf0dc56cc3b1ad652b90
@@ -26,7 +27,7 @@ SWIFT_PASS: 2a8a8c127ad1dd4932a9
 SWIFT_SUFFIX: bd7ab60636c78ed9ea9e
 SWIFT_PREFIX: 0e540eaceadc91f6c8d6
 RABBIT_PASS: 0b0e0a5c8b36a3c65026
-
+```
 
 2. Add repository Yoga openstack
 

@@ -83,7 +83,7 @@ cp /etc/nova/nova.conf /etc/nova/nova.conf.ori
 vi /etc/nova/nova.conf
 ```
 
-```cnf
+```conf
 [api_database]
 connection = mysql+pymysql://nova:6f2265ae74d59956e242@controller/nova_api
 

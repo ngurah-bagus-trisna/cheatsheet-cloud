@@ -128,7 +128,7 @@ auth_url = http://controller:5000/v3
 username = placement
 password = ce4b057ed76829b25b9c
 
-[nautron]
+[neutron]
 auth_url = http://controller:5000
 auth_type = password
 project_domain_name = Default

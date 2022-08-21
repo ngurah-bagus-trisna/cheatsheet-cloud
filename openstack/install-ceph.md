@@ -107,3 +107,9 @@ ceph-deploy mgr create nb-openstack-controller-1
 ```bash
 ceph-deploy osd create --data {device} {ceph-node}
 ```
+
+8. verify
+
+```bash
+ceph config set mon auth_allow_insecure_global_id_reclaim false
+```

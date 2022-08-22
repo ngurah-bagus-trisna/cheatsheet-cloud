@@ -58,6 +58,20 @@ openstack endpoint create --region RegionOne \
 ceph osd pool create images 128 
 
 ceph osd pool set images size 2 # set replica to 2
+ceph osd pool application enable images rbd # set application to rbd
+
+# set key for ceph
+ceph auth get-or-create client.images mon 'allow r' osd 'allow class-read object_prefix rdb_children, allow rwx pool=images' -o /etc/ceph/ceph.client.images.keyring
+
+chgrp glance /etc/ceph/ceph.client.images.keyring
+chmod 0640 /etc/ceph/ceph.client.images.keyring
+
+# edit /etc/ceph/ceph.conf
+
+vi /etc/ceph/ceph.conf
+---
+[client.images]
+keyring = /etc/ceph/ceph.client.images.keyring
 ```
 
 5. Install & configure glance

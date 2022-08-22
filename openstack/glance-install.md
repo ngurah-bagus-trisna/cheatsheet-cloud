@@ -14,7 +14,7 @@ mysql
 ```
 
 ```mysql
-
+CREATE DATABASE glance;
 
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' \
   IDENTIFIED BY '1e2c6b4674ec33c33ecd';

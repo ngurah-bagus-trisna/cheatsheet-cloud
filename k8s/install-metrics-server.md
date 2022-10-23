@@ -30,6 +30,9 @@ wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/
 kubectl apply -f components.yaml
 ```
 
+> Jika saat `kubectl top pod` menunjukan error `the server is currently unable to handle the request (get nodes.metrics.k8s.io)`,
+> di bawah `dnsPolicy` bisa ditambahkan `hostNetwork: true`
+
 4. Makesure metrics-server running on -n kube-system. and test using kubectl top
 
 ```bash

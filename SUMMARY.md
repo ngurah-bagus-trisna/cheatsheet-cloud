@@ -5,6 +5,7 @@
 * [k3s](k3s/README.md)
   * [Install k3s Ansible on Ubuntu](k3s/Install-k3s-ansible.md)
 * [k8s](k8s/README.md)
+  * [Cert Manager](k8s/cert-manager.md)
   * [deploy-kubernetes-cluster](k8s/deploy-kubernetes-cluster.md)
   * [Install Metrics server k8s](k8s/install-metrics-server.md)
   * [install-monitoring-cluster](k8s/install-monitoring-cluster.md)

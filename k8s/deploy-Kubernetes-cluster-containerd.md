@@ -101,7 +101,7 @@ sudo apt-get install -y apt-transport-https ca-certificates curl
 
 ```bash
 
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gp
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 ```
 
 3. Add the Kubernetes apt repository:

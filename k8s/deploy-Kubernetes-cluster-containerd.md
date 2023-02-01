@@ -61,7 +61,6 @@ Change value from false to true
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
-kvm-intel
 EOF
 
 sudo modprobe overlay

@@ -157,6 +157,8 @@ echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 
 2. Install CNI (Container Network Interface)
 
+> Kalo pake calcio coba dulu visit link berikut https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/onpremises
+
 ```bash
 # Flannel
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml

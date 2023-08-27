@@ -1,0 +1,40 @@
+- name: Setup Mirroring Registry
+  hosts: k8s
+  become: true
+  become_user: root
+  tasks:
+  - name: Setup certs.d Directory for Mirroring
+    ansible.builtin.shell: sudo mkdir -p /etc/containerd/certs.d/registry.k8s.io
+
+  - name: Setup certs.d Directory for Mirroring
+    ansible.builtin.shell: sudo mkdir -p /etc/containerd/certs.d/registry-1.docker.io
+
+  - name: Write config hosts mirroring registry
+    ansible.builtin.copy:
+      dest: /etc/containerd/certs.d/registry.k8s.io/hosts.toml
+      content: |
+        server = "https://registry.k8s.io"
+        [host."https://registry.ngurahbagus.my.id:5000"]
+          capabilities = ["pull", "resolve"]
+
+  - name: Write config hosts mirroring docker registry
+    ansible.builtin.copy:
+      dest: /etc/containerd/certs.d/registry-1.docker.io/hosts.toml
+      content: |
+        server = "https://registry-1.docker.io"
+        [host."https://registry.ngurahbagus.my.id:5001"]
+          capabilities = ["pull", "resolve"]
+
+  - name: Configure read certs.d mirror registry
+    ansible.builtin.lineinfile:
+      path: /etc/containerd/config.toml
+      regexp: 'config_path'
+      line: '      config_path = "/etc/containerd/certs.d"'
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: Restart containerd
+    ansible.builtin.systemd:
+      name: containerd
+      state: restarted
